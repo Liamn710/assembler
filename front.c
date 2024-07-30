@@ -12,8 +12,11 @@ struct opcode opcode_table[16] =
     {"mov", 0}, {"cmp", 1}, {"add", 2}, {"sub", 3}, {"lea", 4},{"clr",5},{"not", 6},{"inc", 7},
     {"dec", 8}, {"jmp", 9}, {"bne", 10},{"red", 11},{"prn",12}, {"jsr", 13}, {"rts", 14}, {"stop", 15}
 };
-
+/*all the instructions allowed:*/
 char *instructions_table[] = {".data", ".string", ".extern", ".entry"};
+
+/*the registers allowed:*/
+char *registers[] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
 
 /* we want to separate the opcodes,operands and instructions from the spaces,
    the result will be saved in a struct like this, each instruction/operand/opcode will be saved as a different string */
