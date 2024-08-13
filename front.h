@@ -1,20 +1,34 @@
-struct opcode {
-    char * name;
-    int op_num;
-    int arg_num;
-};
-/* Represents different parts of a data line */
-typedef struct inst_parts {
-    char *label;       /* The label associated with the instruction */
-    short *nums;       /* An array of short integers representing instruction data */
-    int len;           /* The number of data in *nums including '0' at the end of a string */
-    char *arg_label;   /* The label associated with an argument, if applicable */
-    int is_extern;     /* Indicates whether the instruction is marked as external */
-} inst_parts;
+#ifndef FRONT_H
+#define FRONT_H
 
-typedef struct command_parts {
-    char *label;     /* The label associated with the command */
-    int opcode;      /* The opcode of the command */
-    char *source;    /* The source operand of the command */
-    char *dest;      /* The destination operand of the command */
-} command_parts;
+#define SPACES  " \t\v\f"
+#define MAX_LABEL_LENGTH 31
+#define MAX_LINE_LENGTH 81
+
+/* Struct for opcodes */
+struct opcode {
+    char *name;
+    int code;
+    int num_operands;
+};
+
+/* External declarations for opcode table, instruction table, and registers */
+extern struct opcode opcode_table[16];
+extern char *instructions_table[];
+extern char *registers[];
+
+/* Struct for storing separated strings */
+struct string_sep_result {
+    char *strings[80];
+    int strings_count;
+};
+
+/* Functions for processing assembly code */
+struct string_sep_result string_sep(char *str);
+int is_instruction(char *str);
+int is_opcode(char *str);
+int is_reg(char *str);
+int extra_text();
+int check_legal_label(char *str);
+
+#endif /* FRONT_H */
