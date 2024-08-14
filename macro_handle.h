@@ -1,20 +1,30 @@
 #ifndef MACRO_HANDLE_H
 #define MACRO_HANDLE_H
 
-/* Include necessary headers */
-#include <stddef.h> /* For size_t */
+#define MAX_MACROS 100
+#define LINE_BUFFER_SIZE 80
 
-/* Define the macro structure */
+/* Structure to hold macro information */
 struct macro {
-    char *name;
-    char *definition;
-    struct macro *next;
+    char name[32];
+    char text[1024];
+    struct macro *next;  /* To support linked list */
+};
+
+/* Enum to represent the line type */
+enum line_type { 
+    macro_call, 
+    macro_definition, 
+    any_other_line, 
+    end_macro_definition 
 };
 
 /* Function declarations */
 void initialize_macros();
-void add_macro(const char *name, const char *definition);
-void process_macros_from_string(const char *assembly_code);
-void free_macros();
-
-#endif /* MACRO_HANDLE_H */
+void process_macros_from_string(char *assembly_code);
+void add_macro(const char *name, const char *text);
+enum line_type determine_line_type(const char *line);
+struct macro* get_macro_list();  /* Function to access the macro list */
+void free_macros(); /* Function to free the allocated memory for macros */
+char *trim_and_remove_commas(char *str);
+#endif

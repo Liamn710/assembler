@@ -1,4 +1,5 @@
 #include "front.h"
+#include "macro_handle.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -114,4 +115,20 @@ int check_legal_label(char *str) {
     } else {
         return 0;
     }
+}
+
+int is_macro(const char *str) {
+    struct macro *m = get_macro_list();  /* Access the macro list using the accessor function */
+    while (m != NULL) {
+        if (strcmp(m->name, str) == 0) {
+            return 1;
+        }
+        m = m->next;
+    }
+    return 0;
+}
+
+void some_function() {
+    struct macro *m = get_macro_list();  /* Access the macro list using the accessor function */
+    /* Now you can iterate over the macro list or perform other operations */
 }
