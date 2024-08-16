@@ -108,29 +108,30 @@ void process_macros_from_string(char *assembly_code) {
 
 
 char *trim_and_remove_commas(char *str) {
-    char *out = str;  /* Pointer for the output string */
-    char *in = str;   /* Pointer for the input string */
+    char *start = str;
+    char *end;
+    char *dst = str;
 
-    /* Skip leading whitespace */
-    while (*in == ' ' || *in == '\t') {
-        in++;
+
+    while (*start == ' ' || *start == '\t') {
+        start++;
     }
 
-    /* Iterate through the string */
-    while (*in != '\0') {
-        if (*in != ' ' && *in != '\t' && *in != ',' && *in != '\n') {
-            *out++ = *in;  /* Copy character if it's not a space, tab, comma, or newline */
+
+    end = start + strlen(start) - 1;
+    while (end > start && (*end == ' ' || *end == '\t' || *end == ',' || *end == '\n')) {
+        *end-- = '\0';
+    }
+
+
+    while (*start) {
+        if (*start != ',') {
+            *dst++ = *start;
         }
-        in++;
+        start++;
     }
-
-    /* Null-terminate the string */
-    *out = '\0';
-
-    /* Remove trailing whitespace */
-    while (--out >= str && (*out == ' ' || *out == '\t')) {
-        *out = '\0';
-    }
+    *dst = '\0'; 
 
     return str;
 }
+

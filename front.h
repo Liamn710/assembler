@@ -4,6 +4,7 @@
 #define SPACES  " \t\v\f"
 #define MAX_LABEL_LENGTH 31
 #define MAX_LINE_LENGTH 81
+#define MAX_VARIABLES 100
 
 /* Struct for opcodes */
 struct opcode {
@@ -11,6 +12,13 @@ struct opcode {
     int code;
     int num_operands;
 };
+struct variable {
+    char name[32];
+    int address;
+};
+static struct variable variables[MAX_VARIABLES];
+static int variable_count = 0;
+static int next_memory_address = 0x1000; /* Starting address for variables */
 
 /* External declarations for opcode table, instruction table, and registers */
 extern struct opcode opcode_table[16];

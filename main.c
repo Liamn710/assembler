@@ -49,7 +49,7 @@ int main() {
     ssr = string_sep(assembly_code);
 
     for (i = 0; i < ssr.strings_count; i++) {
-    char *str = trim_and_remove_commas(ssr.strings[i]); 
+    char *str = trim_and_remove_commas(ssr.strings[i]);
     int instr_index = is_instruction(str);
     int opcode_index = is_opcode(str);
     int reg_index = is_reg(str);
@@ -65,7 +65,13 @@ int main() {
     } else if (check_legal_label(str)) {
         printf("Label found: %s\n", str);
     } else {
-        printf("Unrecognized string: %s\n", str);
+        int var_address = find_variable(str);
+        if (var_address == -1) {
+            var_address = add_variable(str);
+            printf("New variable found: %s at address %04X\n", str, var_address);
+        } else {
+            printf("Variable found: %s at address %04X\n", str, var_address);
+        }
     }
 }
 
