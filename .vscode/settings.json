@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "front_loren.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c"
+    }
+}
