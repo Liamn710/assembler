@@ -174,3 +174,85 @@ int add_variable(const char *name) {
     variable_count++;
     return address;
 }
+
+void process_line(char *line, int *binary_words, int *binary_word_count) {
+    char *token;
+    int instr_index, opcode_index, reg_index;
+    int word1 = 0, word2 = 0, word3 = 0;
+
+    /* Reset binary word count */
+    *binary_word_count = 0;
+
+    /* Tokenize the line to get the first word */
+    token = strtok(line, " \t");
+    if (token == NULL) return;
+
+    /* Check if the first token is a label */
+    if (is_label(token) >= 0) {
+        token = strtok(NULL, " \t"); /* Get the next token */
+    }
+
+    /* If there's no token left, return */
+    if (token == NULL) return;
+
+    /* Check if the token is an instruction or opcode */
+    instr_index = is_instruction(token);
+    opcode_index = is_opcode(token);
+    if (instr_index >= 0) {
+        /* Handle instruction */
+        word1 |= (opcode_table[instr_index].code << 11);
+    } else if (opcode_index >= 0) {
+        /* Handle opcode */
+        word1 |= (opcode_table[opcode_index].code << 11);
+    } else {
+        /* Handle macro or unknown */
+        if (is_macro(token)) {
+            printf("Macro found: %s\n", token);
+        } else {
+            add_variable(token);
+        }
+        return;
+    }
+
+    /* Tokenize the next operand (if any) */
+    token = strtok(NULL, " ,\t");
+    if (token != NULL) {
+        reg_index = is_reg(token);
+        if (reg_index >= 0) {
+            /* Handle register as source operand */
+            word1 |= (1 << (7 + reg_index)); /* Example for setting source operand bits */
+        } else {
+            /* Handle variable or label as source operand */
+            add_variable(token);
+        }
+    }
+
+    /* Tokenize the next operand (if any) */
+    token = strtok(NULL, " ,\t");
+    if (token != NULL) {
+        reg_index = is_reg(token);
+        if (reg_index >= 0) {
+            /* Handle register as destination operand */
+            word1 |= (1 << (3 + reg_index)); /* Example for setting destination operand bits */
+        } else {
+            /* Handle variable or label as destination operand */
+            add_variable(token);
+        }
+    }
+
+    /* Set the A, R, E bits for the first word */
+    word1 |= (1 << 0); /* Set 'A' bit */
+    /* R and E bits remain 0 */
+
+    /* Store the binary word */
+    binary_words[(*binary_word_count)++] = word1;
+
+    /* Additional words (e.g., for variables) would be added similarly */
+}
+
+void print_binary(int num) {
+    int i;
+    for (i = 14; i >= 0; i--) {
+        putchar((num & (1 << i)) ? '1' : '0');
+    }
+}

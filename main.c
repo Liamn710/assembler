@@ -33,7 +33,7 @@ char* convert_assembly_to_string(const char *filename) {
 }
 
 int main() {
-    int i;
+    int i, j;
     const char *filename = "ps.as"; /* The input assembly file */
     char *assembly_code = convert_assembly_to_string(filename);
     struct string_sep_result ssr;
@@ -44,40 +44,26 @@ int main() {
     }
 
     initialize_macros();
-    process_macros_from_string(assembly_code); 
-
+    process_macros_from_string(assembly_code);
+    
     ssr = string_sep(assembly_code);
 
     for (i = 0; i < ssr.strings_count; i++) {
-    char *str = trim_and_remove_commas(ssr.strings[i]);
-    int instr_index = is_instruction(str);
-    int opcode_index = is_opcode(str);
-    int reg_index = is_reg(str);
-    int label_value = is_label(str);
-    char label_name[32];
+        char *str = trim_and_remove_commas(ssr.strings[i]);
+        int binary_words[MAX_BINARY_WORDS];
+        int binary_word_count = 0;
 
-    if (instr_index >= 0) {
-        printf("Instruction found: %s\n", str);
-    } else if (label_value >= 0) {
-        printf("label found: %s at address %i\n", str, label_value);      
-    } else if (opcode_index >= 0) {
-        printf("Opcode found: %s\n", str);      
-    } else if (reg_index >= 0) {
-        printf("Register found: %s\n", str);
-    } else if (is_macro(str)) {  /* Check if it's a macro */
-        printf("Macro found: %s\n", str);
-    } else if (check_legal_label(str)) {
-        printf("Label found: %s\n", str);
-    } else {
-        int var_address = find_variable(str);
-        if (var_address == -1) {
-            var_address = add_variable(str);
-            printf("New variable found: %s at address %04X\n", str, var_address);
-        } else {
-            printf("Variable found: %s at address %04X\n", str, var_address);
+        /* Process the current line */
+        process_line(str, binary_words, &binary_word_count);
+
+        /* Print the binary words for the current line */
+        printf("Line %d: ", i + 1);
+        for (j = 0; j < binary_word_count; j++) {
+            print_binary(binary_words[j]); /* Print each binary word */
+            printf(" ");
         }
+        printf("\n"); /* Newline to separate each line's output */
     }
-}
 
     free_macros();
     free(assembly_code);
