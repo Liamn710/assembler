@@ -109,28 +109,29 @@ void process_macros_from_string(char *assembly_code) {
 
 char *trim_and_remove_commas(char *str) {
     char *start = str;
-    char *end;
+    char *end = str;
     char *dst = str;
-
 
     while (*start == ' ' || *start == '\t') {
         start++;
     }
 
-
-    end = start + strlen(start) - 1;
-    while (end > start && (*end == ' ' || *end == '\t' || *end == ',' || *end == '\n')) {
-        *end-- = '\0';
+    while (*end && *end != '\n') {
+        end++;
     }
 
+    end--;
+    while (end > start && (*end == ' ' || *end == '\t' || *end == ',')) {
+        end--;
+    }
 
-    while (*start) {
+    while (start <= end) {
         if (*start != ',') {
             *dst++ = *start;
         }
         start++;
     }
-    *dst = '\0'; 
+    *dst = '\0';  
 
     return str;
 }

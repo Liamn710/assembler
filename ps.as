@@ -1,9 +1,11 @@
 
-mov r1, r2  
+MAIN: mov r1, r2  
 add r3, r4
 mov r1, A
-mov A, B  
+mov A, B
+
 inc A
+
 macro zero_reg
         clr r1
         clr r2

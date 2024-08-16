@@ -53,11 +53,15 @@ int main() {
     int instr_index = is_instruction(str);
     int opcode_index = is_opcode(str);
     int reg_index = is_reg(str);
+    int label_value = is_label(str);
+    char label_name[32];
 
     if (instr_index >= 0) {
         printf("Instruction found: %s\n", str);
+    } else if (label_value >= 0) {
+        printf("label found: %s at address %i\n", str, label_value);      
     } else if (opcode_index >= 0) {
-        printf("Opcode found: %s\n", str);
+        printf("Opcode found: %s\n", str);      
     } else if (reg_index >= 0) {
         printf("Register found: %s\n", str);
     } else if (is_macro(str)) {  /* Check if it's a macro */

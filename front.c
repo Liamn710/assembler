@@ -18,7 +18,8 @@ char *instructions_table[] = {".data", ".string", ".extern", ".entry"};
 
 /* Registers */
 char *registers[] = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"};
-
+int label_count = 0;
+int label_value_counter = LABEL_START_VALUE;
 /* Function to separate strings by spaces */
 struct string_sep_result string_sep(char *str) {
     int strings_count = 0;
@@ -104,18 +105,40 @@ int extra_text() {
 
 /* Function to check if a label is legal */
 int check_legal_label(char *str) {
-    if (str == NULL) {
-        return 0;
+    if (str[strlen(str) - 1] == ':') {
+        str[strlen(str) - 1] = '\0';  /* Remove the colon */
+        return 1;
     }
-    if (isalpha(*str) && strlen(str) <= MAX_LABEL_LENGTH && (is_opcode(str) < 0) && !is_instruction(str) && (is_reg(str) < 0)) {
-        while (*(++str) != '\0' && *(str) != ' ' && (isalpha(*str) || isdigit(*str))) { ;
+    return 0;
+}
+void add_label(const char *label) {
+    if (label_count >= MAX_LABELS) {
+        fprintf(stderr, "Label table overflow.\n");
+        exit(1);
+    }
+    strncpy(label_table[label_count].name, label, sizeof(label_table[label_count].name) - 1);
+    label_table[label_count].value = label_value_counter++;
+    label_count++;
+}
+int find_label_address(const char *label) {
+    int i;
+    for (i = 0; i < label_count; i++) {
+        if (strcmp(label_table[i].name, label) == 0) {
+            return label_table[i].value;
         }
     }
-    if (*str == '\0' || *str == ' ') {
-        return 1;
-    } else {
-        return 0;
+    return -1;  /* Return -1 if label not found */
+}
+int is_label(char *str){
+    if (check_legal_label(str) > 0){
+        int value;
+        add_label(str);
+        value = find_label_address(str);
+        if(value >= 0){
+            return value;
+        }
     }
+    return -1;
 }
 
 int is_macro(const char *str) {

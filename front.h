@@ -5,6 +5,8 @@
 #define MAX_LABEL_LENGTH 31
 #define MAX_LINE_LENGTH 81
 #define MAX_VARIABLES 100
+#define MAX_LABELS 100
+#define LABEL_START_VALUE 100
 
 /* Struct for opcodes */
 struct opcode {
@@ -16,6 +18,11 @@ struct variable {
     char name[32];
     int address;
 };
+struct label_entry {
+    char name[32];
+    int value;  /* Use 'value' instead of 'address' */
+};
+struct label_entry label_table[MAX_LABELS];
 static struct variable variables[MAX_VARIABLES];
 static int variable_count = 0;
 static int next_memory_address = 0x1000; /* Starting address for variables */
