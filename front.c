@@ -241,7 +241,7 @@ void process_line(char *line, int *binary_words, int *binary_word_count) {
     }
 
     /* Set the A, R, E bits for the first word */
-    word1 |= (1 << 0); /* Set 'A' bit */
+    word1 |= (1 << 01); /* Set 'A' bit */
     /* R and E bits remain 0 */
 
     /* Store the binary word */
