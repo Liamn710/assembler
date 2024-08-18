@@ -7,7 +7,7 @@
 #define MAX_VARIABLES 100
 #define MAX_LABELS 100
 #define LABEL_START_VALUE 100
-#define MAX_BINARY_WORDS 3
+
 /* Struct for opcodes */
 struct opcode {
     char *name;

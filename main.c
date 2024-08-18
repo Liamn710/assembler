@@ -33,8 +33,8 @@ char* convert_assembly_to_string(const char *filename) {
 }
 
 int main() {
-    int i;
-    const char *filename = "ps.as"; /* The input assembly file */
+        int i;
+    const char *filename = "ps.as"; /* The input asssembly file */
     char *assembly_code = convert_assembly_to_string(filename);
     struct string_sep_result ssr;
 
@@ -54,7 +54,6 @@ int main() {
     int opcode_index = is_opcode(str);
     int reg_index = is_reg(str);
     int label_value = is_label(str);
-    char label_name[32];
 
     if (instr_index >= 0) {
         printf("Instruction found: %s\n", str);
