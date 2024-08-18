@@ -1,4 +1,8 @@
 **Assembler for Simulated PC**
+tldr - to run the assembler run the commends:
+make
+./assembler
+and the output will be in output.ob
 Overview:
 This project is an assembler designed to generate machine code for a simulated PC with the following hardware specifications:
 
